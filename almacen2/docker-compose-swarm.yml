@@ -1,0 +1,38 @@
+version: "3"
+services:
+  usuarios:
+    image: usuarios
+    links:
+      - db
+    ports:
+      - "3001:3001"
+  productos:
+    image: productos
+    links:
+      - db
+    ports:
+      - "3002:3002"
+  ordenes:
+    image: ordenes
+    links:
+      - db
+      - usuarios
+      - productos
+    ports:
+      - "3003:3003"
+  microweb:
+    image: microweb
+    links:
+      - usuarios
+      - productos
+      - ordenes
+    ports:
+      - "1080:80"
+  db:
+    image: mysql:5.7
+    ports:
+      - "32000:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: roj4sxil3na
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/:ro
